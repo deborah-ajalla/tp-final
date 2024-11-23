@@ -1,0 +1,5 @@
+-> Crear CRUD
+-> Interfaz Grafica. (Tkinter, ttkthemes, kiVY, pYqT)
+-> Minimo de 3 tablas relacionadas entre sí.
+-> Mínimo 5 campos de entrada. (input, checkbox, select)
+-> FECHA DE ENTREGA : 11/12/2024
