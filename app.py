@@ -1,5 +1,6 @@
 import tkinter as tk
 import conexion as c  # --> archivo que conecta la BBDD
+from consultas import guardar_paciente
 from tkinter import messagebox, ttk
 import sys
 #---------------------------------------------------------------
@@ -102,7 +103,7 @@ entry_mail.config(width = 28, font = ('Arial', '12', 'bold'), fg=BOTONES)
 entry_mail.place(x = 620, y = 150)
 #-----------------------------------------------
 # --> Botones
-boton_nuevo = tk.Button (ventana, text = 'Nuevo', command = "")
+boton_nuevo = tk.Button (ventana, text = 'Nuevo', command = habilitar_campos)
 boton_nuevo.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY)
 boton_nuevo.place(x = 130, y = 260)
 
@@ -110,9 +111,11 @@ boton_guardar = tk.Button (ventana, text = 'Guardar', command = "")
 boton_guardar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY)
 boton_guardar.place(x = 410, y = 260)
 
-boton_cancelar = tk.Button (ventana, text = 'Cancelar', command = "")
+boton_cancelar = tk.Button (ventana, text = 'Cancelar', command = bloquear_campos)
 boton_cancelar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY)
 boton_cancelar.place(x = 690, y = 260)
+
+#-----------------------------------------------
 # --> Creacion de la tabla Gráfica 
 tabla = ttk.Treeview (ventana, column = ('Nombre', 'Apellido','Dni', 'Celular', 'Mail'))
 tabla.place(x =20, y = 310, width=960, height=220)
@@ -132,13 +135,60 @@ tabla.column ('#4', anchor = 'center', width = 110)
 tabla.column ('#5', anchor = 'center', width = 120)
 #-----------------------------------------------
 # --> Botones
-boton_nuevo = tk.Button (ventana, text = 'Modificar', command = "")
-boton_nuevo.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY)
-boton_nuevo.place(x = 220, y = 550)
+boton_modificar = tk.Button (ventana, text = 'Modificar', command = "")
+boton_modificar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY)
+boton_modificar.place(x = 220, y = 550)
 
-boton_guardar = tk.Button (ventana, text = 'Eliminar', command = "")
-boton_guardar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY)
-boton_guardar.place(x = 550, y = 550)
+boton_eliminar = tk.Button (ventana, text = 'Eliminar', command = "")
+boton_eliminar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY)
+boton_eliminar.place(x = 550, y = 550)
 #---------------------------------------------------------------
+# --> FUNCIONES <-- 
+def guardar_campos(paciente):
+    paciente = pacientes(
+        nombre.get(),
+        apellido.get(),
+        dni.get(),
+        cel.get(),
+        mail.get()
+    )
+
+    if id_paciente == None:
+        guardar_paciente(pacientes)
+    else:
+        editar_paciente(paciente,int(id_paciente))
+
+    bloquear_campos()
+    mostrar_tabla()
+
+
+def bloquear_campos():    
+    entry_nombre.config(state='disabled')    
+    entry_apellido.config(state='disabled')    
+    entry_dni.config(state='disabled')    
+    entry_cel.config(state='disabled')  
+    entry_mail.config(state='disabled')  
+    boton_guardar.config(state='disabled')    
+    boton_cancelar.config(state='disabled')    
+    boton_nuevo.config(state='normal')
+    nombre.set('')
+    apellido.set('')
+    dni.set('')
+    cel.set('')
+    mail.set('')
+ 
+    id_paciente = None
+
+
+def habilitar_campos():    
+    entry_nombre.config(state='normal')    
+    entry_apellido.config(state='normal')    
+    entry_dni.config(state='normal')    
+    entry_cel.config(state='normal')
+    entry_mail.config(state='normal')
+    boton_guardar.config(state='normal')    
+    boton_cancelar.config(state='normal')    
+    boton_nuevo.config(state='disabled')
+#-----------------------------------------------
 # -> para que la ventana se mantenga abierta
 ventana.mainloop()
