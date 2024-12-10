@@ -43,6 +43,7 @@ def crear_tabla():
 class Paciente():
 
     def __init__(self, nombre, apellido, dni, cel, mail):
+        self.id_paciente = None
         self.nombre = nombre
         self.apellido = apellido
         self.dni = dni
@@ -68,11 +69,11 @@ def guardar_paciente(paciente):
 #------------------------------------------
 def listar_pacientes():
     cone = Conexion()
+    listar_pacientes = []
    
     sql = f'''
-            SELECT * FROM pacientes as 
-            INNER JOIN tratamientos_pacientes as tp
-            ON p.ID = tp.ID;
+            SELECT * FROM pacientes as p
+           
           '''
     try:
         cone.cursor.execute(sql)

@@ -77,6 +77,11 @@ class Frame (tk.Frame):
         self.entry_mail = tk.Entry(self, textvariable = self.mail)
         self.entry_mail.config(width = 28, font = ('Arial', '12', 'bold'), fg=BOTONES)
         self.entry_mail.place(x = 620, y = 150)
+
+        x = listar_tratamientos()
+        y = []
+        for i in x:
+            y.append(i[1])
     #-----------------------------------------------
     #--> Botones
     def botones(self):
@@ -93,7 +98,7 @@ class Frame (tk.Frame):
         self.boton_cancelar.place(x = 690, y = 260)
     #-----------------------------------------------
     def guardar_campos(self):
-        paciente = Paciente(
+        paciente = Paciente(    # -> se instancia la clase
             self.nombre.get(),
             self.apellido.get(),
             self.dni.get(),
@@ -104,10 +109,11 @@ class Frame (tk.Frame):
         if self.id_paciente == None:
             guardar_paciente(paciente)
         else:
-            editar_paciente(paciente, int (self.id_paciente))
+            editar_paciente(paciente, int(self.id_paciente))
 
-        self.bloquear_campos()
         self.mostrar_tabla()
+        self.bloquear_campos()
+        
     #-----------------------------------------------
     def habilitar_campos(self):
         self.entry_nombre.config (state= 'normal')
@@ -137,9 +143,8 @@ class Frame (tk.Frame):
     #-----------------------------------------------
     def mostrar_tabla(self):
 
-        # self.lista_p = listar_peli()
-        
-        # self.lista_p.reverse()
+        self.lista_p = listar_pacientes()  # --> me trae el listado que capturo con el fetchall
+        self.lista_p.reverse()             # --> invierte el orden sino aparecen en orden de agregado
 
         self.tabla = ttk.Treeview(self, column = ('Nombre', 'Apellido','Dni', 'Celular', 'Mail'))
         self.tabla.place(x =20, y = 310, width=960, height=220) 
@@ -158,16 +163,16 @@ class Frame (tk.Frame):
         self.tabla.column ('#4', anchor = 'center', width = 110)
         self.tabla.column ('#5', anchor = 'center', width = 120)
 
-        # for p in self.lista_p:
-        #     self.tabla.insert('',0,text=p[0],
-        #                       values=(p[1],p[2],p[5]))
+        for p in self.lista_p:                      # --> recorre el listado de pacientes
+            self.tabla.insert('',0,text=p[0],
+                               values = (p[1],p[2],p[3],p[4],p[5])) # --> inserta los valores en cada campo
 
         # --> Botones
-        self.boton_modificar = tk.Button (self, text = 'Modificar', command = "")
+        self.boton_modificar = tk.Button (self, text = 'Modificar', command = self.editar_registros)
         self.boton_modificar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY,activebackground= BOTONES,cursor='hand2')
         self.boton_modificar.place(x = 220, y = 550)
 
-        self.boton_eliminar = tk.Button (self, text = 'Eliminar', command = "")
+        self.boton_eliminar = tk.Button (self, text = 'Eliminar', command = self.eliminar_registros)
         self.boton_eliminar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY,activebackground= BOTONES,cursor='hand2')
         self.boton_eliminar.place(x = 550, y = 550)
     #-----------------------------------------------
@@ -175,26 +180,27 @@ class Frame (tk.Frame):
         try:
             self.id_paciente = self.tabla.item (self.tabla.selection())['text']
 
-            self.nombe_paciente = self.tabla.item (self.tabla.selection())['values'][0]
-            self.apellido_paciente = self.tabla.item(self.tabla.selection())['values'][1]
-            self.dni_paciente = self.tabla.item(self.tabla.selection())['values'][2]
-            self.cel_paciente= self.tabla.item(self.tabla.selection())['values'][3]
-            self.mail_paciente = self.tabla.item(self.tabla.selection())['values'][4]
+            self.nombe_paciente_e = self.tabla.item (self.tabla.selection())['values'][0]
+            self.apellido_paciente_e = self.tabla.item(self.tabla.selection())['values'][1]
+            self.dni_paciente_e = self.tabla.item(self.tabla.selection())['values'][2]
+            self.cel_paciente_e= self.tabla.item(self.tabla.selection())['values'][3]
+            self.mail_paciente_e = self.tabla.item(self.tabla.selection())['values'][4]
 
             self.habilitar_campos()
 
-            self.nombre.set(self.nombe_paciente)
-            self.apellido.set(self.apellido_paciente)
-            self.dni.set(self.dni_paciente)
-            self.cel.set(self.cel_paciente)
-            self.mail.set(self.mail_paciente)
+            self.nombre.set(self.nombe_paciente_e)
+            self.apellido.set(self.apellido_paciente_e)
+            self.dni.set(self.dni_paciente_e)
+            self.cel.set(self.cel_paciente_e)
+            self.mail.set(self.mail_paciente_e)
         except:
             pass
+      
     #-----------------------------------------------
     def eliminar_registros(self):
         self.id_paciente = self.tabla.item(self.tabla.selection())['text']
 
-        # borrar_paciente(int(self.id_paciente))
+        borrar_paciente(int(self.id_paciente))
 
         self.mostrar_tabla()
 #-----------------------------------------------
