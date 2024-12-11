@@ -6,7 +6,7 @@ def crear_tabla():
     sql = """
               CREATE TABLE IF NOT EXISTS pacientes
              (
-              ID INTEGER PRIMARY KEY AUTOINCREMENT,
+              id_paciente INTEGER PRIMARY KEY AUTOINCREMENT,
               NOMBRE TEXT NOT NULL,
               APELLIDO TEXT NOT NULL,
               DNI TEXT NOT NULL UNIQUE,
@@ -103,8 +103,8 @@ def listar_tratamientos():
     finally:
         cone.cerrar_conexion()
 #------------------------------------------
-def editar_paciente(paciente, id):
-    cone = Conexion()
+def editar_paciente(paciente, id_paciente):
+    cone = Conexion()   
     
     sql= f'''
              UPDATE pacientes
@@ -113,7 +113,7 @@ def editar_paciente(paciente, id):
                Dni = '{paciente.dni}', 
                Celular = '{paciente.cel}', 
                Mail = '{paciente.mail}'
-              WHERE ID = {id};
+              WHERE id_paciente = {id_paciente};
               ;
     '''
     try:
@@ -123,11 +123,11 @@ def editar_paciente(paciente, id):
     finally:
         cone.cerrar_conexion()
 #------------------------------------------
-def borrar_paciente(id):
+def borrar_paciente(id_paciente):
     cone = Conexion()
 
     sql= f'''
-         DELETE FROM pacientes WHERE ID = {id};
+         DELETE FROM pacientes WHERE id_paciente = {id_paciente};
          '''
     try:
         cone.cursor.execute(sql)

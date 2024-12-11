@@ -14,7 +14,7 @@ class Frame (tk.Frame):
         super().__init__(root, width=1000, height=600, bg=PRIMARY)
         self.root = root
         self.pack()
-        self.id_paciente= None
+        self.id_paciente = None
 
         crear_tabla()
         self.titulo()
@@ -162,8 +162,9 @@ class Frame (tk.Frame):
         self.tabla.column ('#4', anchor = 'center', width = 110)
         self.tabla.column ('#5', anchor = 'center', width = 120)
 
-        for p in self.lista_p:                      # --> recorre el listado de pacientes
-            self.tabla.insert('',0,text=p[0],
+        # --> iterar lista de pacientes
+        for p in self.lista_p:                      
+            self.tabla.insert('',0,text=p[0],   #  --> el [0] es el id
                                values = (p[1],p[2],p[3],p[4],p[5])) # --> inserta los valores en cada campo
 
         # --> Botones
@@ -176,33 +177,6 @@ class Frame (tk.Frame):
         self.boton_eliminar.place(x = 550, y = 550)
     #-----------------------------------------------
     def editar_registros(self):
-        # try:
-        #     seleccion = self.tabla.selection()
-        #     if not seleccion:
-        #         print("No hay fila seleccionada.")
-        #         return
-
-        #     item = self.tabla.item(seleccion[0])
-
-        #     self.id_paciente = item['text']
-        #     self.nombre_paciente = item['values'][0]
-        #     self.apellido_paciente = item['values'][1]
-        #     self.dni_paciente = item['values'][2]
-        #     self.cel_paciente = item['values'][3]
-        #     self.mail_paciente = item['values'][4]
-
-        #     # Habilitar campos para editar
-        #     self.habilitar_campos()
-
-        #     # Establecer los valores en los campos de entrada
-        #     self.nombre.set(self.nombre_paciente)
-        #     self.apellido.set(self.apellido_paciente)
-        #     self.dni.set(self.dni_paciente)
-        #     self.cel.set(self.cel_paciente)
-        #     self.mail.set(self.mail_paciente)
-
-        # except Exception as e:
-        #     print(f"Error al editar registros: {e}")
         try:
              self.id_paciente = self.tabla.item (self.tabla.selection())['text']
 
@@ -214,15 +188,47 @@ class Frame (tk.Frame):
 
              self.habilitar_campos()
 
-             self.nombre.set(self.nombre_paciente)
-             self.apellido.set(self.apellido_paciente)
-             self.dni.set (self.dni_paciente)
-             self.cel.set(self.cel_paciente)
-             self.mail.set(self.mail_paciente)
+             self.entry_nombre.insert(0, self.nombre_paciente)
+             self.entry_apellido.insert(0,self.apellido_paciente)
+             self.entry_dni.insert(0, self.dni_paciente)
+             self.entry_cel.insert(0, self.cel_paciente)
+             self.entry_mail.insert(0,self.mail_paciente)
+
+            #  self.nombre.set(self.nombre_paciente)
+            #  self.apellido.set(self.apellido_paciente)
+            #  self.dni.set (self.dni_paciente)
+            #  self.cel.set(self.cel_paciente)
+            #  self.mail.set(self.mail_paciente)
 
         except:
              pass
-      
+        
+        self.mostrar_tabla()
+
+    # def actualizar_persona(id_paciente, nombre, apellido, dni, cel, mail):
+    #     try:
+    #         nombre = nombre
+    #         apellido = apellido
+    #         dni = dni
+    #         cel = cel
+    #         mail = mail
+            
+    #         cone = Conexion()
+    #         cursor = conn.cursor()
+    #         cursor.execute("UPDATE personas SET nombre = ?, dni = ?, fecha = ? WHERE id = ?", (nombre, apellido,dni, cel,mail, id))
+    #         cone.commit()
+    #         cone.close()
+    #         messagebox.showinfo("Éxito", "Persona actualizada exitosamente.")
+    #         limpiar_campos()
+    #         mostrar_personas()
+    #     except ValueError as e:
+    #         messagebox.showerror("Error", str(e))
+    #     except sqlite3.IntegrityError:
+    #         messagebox.showerror("Error", "El DNI ya está registrado.")
+    #     except Exception as e:
+    #         messagebox.showerror("Error", f"Error: {e}")
+
+    
     #-----------------------------------------------
     def eliminar_registros(self):
         self.id_paciente = self.tabla.item(self.tabla.selection())['text']

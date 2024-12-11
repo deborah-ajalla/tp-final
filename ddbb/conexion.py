@@ -1,8 +1,7 @@
 import sqlite3
 #------------------------------------------------------------
 class Conexion():
-    def __init__(self):
-        # self.base_de_datos = 'ddbb/tp.db'  
+    def __init__(self): 
         self.conexion = sqlite3.connect("tp.db")
         self.cursor = self.conexion.cursor()
 
