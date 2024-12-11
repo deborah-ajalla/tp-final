@@ -108,10 +108,14 @@ def editar_paciente(paciente, id):
     
     sql= f'''
              UPDATE pacientes
-             SET Nombre = '{paciente.nombre}', Apellido = '{paciente.apellido}', Dni = '{paciente.dni}', Cel = '{paciente.cel}', Mail = '{paciente.mail}'
-              WHERE ID = {id}
-             ;
-         '''
+             SET Nombre = '{paciente.nombre}',
+               Apellido = '{paciente.apellido}',
+               Dni = '{paciente.dni}', 
+               Celular = '{paciente.cel}', 
+               Mail = '{paciente.mail}'
+              WHERE ID = {id};
+              ;
+    '''
     try:
         cone.cursor.execute(sql)
     except:

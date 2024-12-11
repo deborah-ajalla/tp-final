@@ -13,8 +13,8 @@ class Frame (tk.Frame):
     def __init__(self, root = None):
         super().__init__(root, width=1000, height=600, bg=PRIMARY)
         self.root = root
-        self.id_paciente= None
         self.pack()
+        self.id_paciente= None
 
         crear_tabla()
         self.titulo()
@@ -78,10 +78,10 @@ class Frame (tk.Frame):
         self.entry_mail.config(width = 28, font = ('Arial', '12', 'bold'), fg=BOTONES)
         self.entry_mail.place(x = 620, y = 150)
 
-        x = listar_tratamientos()
-        y = []
-        for i in x:
-            y.append(i[1])
+        # x = listar_tratamientos()
+        # y = []
+        # for i in x:
+        #     y.append(i[1])
     #-----------------------------------------------
     #--> Botones
     def botones(self):
@@ -110,10 +110,9 @@ class Frame (tk.Frame):
             guardar_paciente(paciente)
         else:
             editar_paciente(paciente, int(self.id_paciente))
-
-        self.mostrar_tabla()
-        self.bloquear_campos()
         
+        self.bloquear_campos()
+        self.mostrar_tabla()        
     #-----------------------------------------------
     def habilitar_campos(self):
         self.entry_nombre.config (state= 'normal')
@@ -177,24 +176,52 @@ class Frame (tk.Frame):
         self.boton_eliminar.place(x = 550, y = 550)
     #-----------------------------------------------
     def editar_registros(self):
+        # try:
+        #     seleccion = self.tabla.selection()
+        #     if not seleccion:
+        #         print("No hay fila seleccionada.")
+        #         return
+
+        #     item = self.tabla.item(seleccion[0])
+
+        #     self.id_paciente = item['text']
+        #     self.nombre_paciente = item['values'][0]
+        #     self.apellido_paciente = item['values'][1]
+        #     self.dni_paciente = item['values'][2]
+        #     self.cel_paciente = item['values'][3]
+        #     self.mail_paciente = item['values'][4]
+
+        #     # Habilitar campos para editar
+        #     self.habilitar_campos()
+
+        #     # Establecer los valores en los campos de entrada
+        #     self.nombre.set(self.nombre_paciente)
+        #     self.apellido.set(self.apellido_paciente)
+        #     self.dni.set(self.dni_paciente)
+        #     self.cel.set(self.cel_paciente)
+        #     self.mail.set(self.mail_paciente)
+
+        # except Exception as e:
+        #     print(f"Error al editar registros: {e}")
         try:
-            self.id_paciente = self.tabla.item (self.tabla.selection())['text']
+             self.id_paciente = self.tabla.item (self.tabla.selection())['text']
 
-            self.nombe_paciente_e = self.tabla.item (self.tabla.selection())['values'][0]
-            self.apellido_paciente_e = self.tabla.item(self.tabla.selection())['values'][1]
-            self.dni_paciente_e = self.tabla.item(self.tabla.selection())['values'][2]
-            self.cel_paciente_e= self.tabla.item(self.tabla.selection())['values'][3]
-            self.mail_paciente_e = self.tabla.item(self.tabla.selection())['values'][4]
+             self.nombre_paciente = self.tabla.item (self.tabla.selection())['values'][0]
+             self.apellido_paciente = self.tabla.item(self.tabla.selection())['values'][1]
+             self.dni_paciente = self.tabla.item(self.tabla.selection())['values'][2]
+             self.cel_paciente = self.tabla.item(self.tabla.selection())['values'][3]
+             self.mail_paciente = self.tabla.item(self.tabla.selection())['values'][4]
 
-            self.habilitar_campos()
+             self.habilitar_campos()
 
-            self.nombre.set(self.nombe_paciente_e)
-            self.apellido.set(self.apellido_paciente_e)
-            self.dni.set(self.dni_paciente_e)
-            self.cel.set(self.cel_paciente_e)
-            self.mail.set(self.mail_paciente_e)
+             self.nombre.set(self.nombre_paciente)
+             self.apellido.set(self.apellido_paciente)
+             self.dni.set (self.dni_paciente)
+             self.cel.set(self.cel_paciente)
+             self.mail.set(self.mail_paciente)
+
         except:
-            pass
+             pass
       
     #-----------------------------------------------
     def eliminar_registros(self):
