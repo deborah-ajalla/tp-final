@@ -6,12 +6,16 @@ def crear_tabla():
     sql = """
               CREATE TABLE IF NOT EXISTS pacientes
              (
-              id_paciente INTEGER PRIMARY KEY AUTOINCREMENT,
+              ID INTEGER PRIMARY KEY AUTOINCREMENT,
               NOMBRE TEXT NOT NULL,
               APELLIDO TEXT NOT NULL,
               DNI TEXT NOT NULL UNIQUE,
               CELULAR TEXT NOT NULL UNIQUE,
-              MAIL TEXT NOT NULL UNIQUE
+              MAIL TEXT NOT NULL UNIQUE,
+              ID_TRATAMIENTOS INTEGER,
+              ID_PRODUCTOS INTEGER,
+              FOREIGN KEY(ID_TRATAMIENTOS) REFERENCES tratamientos(id),
+              FOREIGN KEY(ID_PRODUCTOS) REFERENCES productos(id)
               );
 
                CREATE TABLE IF NOT EXISTS tratamientos
@@ -20,16 +24,12 @@ def crear_tabla():
               NOMBRE TEXT NOT NULL
               );
 
-              CREATE TABLE IF NOT EXISTS tratamientos_pacientes
+              CREATE TABLE IF NOT EXISTS productos
              (
               ID INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-              DIAGNOSTICO TEXT NOT NULL UNIQUE,
-              AVANCES TEXT NOT NULL UNIQUE,
-              ID_PACIENTES INTEGER,
-              ID_TRATAMIENTOS INTEGER,
-              FOREIGN KEY(ID_PACIENTES) REFERENCES pacientes(id),
-              FOREIGN KEY(ID_TRATAMIENTOS) REFERENCES tratamientos(id)
-              )
+              NOMBRE TEXT NOT NULL        
+             
+              );
 
            """
     try:
@@ -103,31 +103,42 @@ def listar_tratamientos():
     finally:
         cone.cerrar_conexion()
 #------------------------------------------
-def editar_paciente(paciente, id_paciente):
+def editar_paciente(paciente, id):
     cone = Conexion()   
     
-    sql= f'''
-             UPDATE pacientes
-             SET Nombre = '{paciente.nombre}',
-               Apellido = '{paciente.apellido}',
-               Dni = '{paciente.dni}', 
-               Celular = '{paciente.cel}', 
-               Mail = '{paciente.mail}'
-              WHERE id_paciente = {id_paciente};
-              ;
-    '''
+    # sql= f'''
+    #          UPDATE pacientes
+    #          SET NOMBRE = '{paciente.nombre}',
+    #            APELLIDO = '{paciente.apellido}',
+    #            DNI = '{paciente.dni}', 
+    #            CELULAR = '{paciente.cel}', 
+    #            MAIL = '{paciente.mail}'
+    #           WHERE ID = {id};
+    #           ;
+    # '''
+
+    sql= f"""
+         UPDATE pacientes
+         SET NOMBRE = ?,
+         APELLIDO = ?,
+         DNI = ?,
+         CELULAR = ?,
+         MAIL = ?
+         WHERE ID = ?;
+"""
     try:
-        cone.cursor.execute(sql)
+        cone.cursor.execute(sql, (paciente.nombre, paciente.apellido,paciente.dni, paciente.cel,paciente.mail, id))
+        cone.cerrar_conexion()
+        # cone.cursor.commit()
     except:
         pass
-    finally:
-        cone.cerrar_conexion()
+       
 #------------------------------------------
-def borrar_paciente(id_paciente):
+def borrar_paciente(id):
     cone = Conexion()
 
     sql= f'''
-         DELETE FROM pacientes WHERE id_paciente = {id_paciente};
+         DELETE FROM pacientes WHERE ID = {id};
          '''
     try:
         cone.cursor.execute(sql)

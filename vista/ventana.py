@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from ddbb.consultas import Paciente, crear_tabla, guardar_paciente, listar_pacientes, listar_tratamientos, editar_paciente, borrar_paciente
+from ddbb.consultas import Paciente, crear_tabla, guardar_paciente, listar_pacientes, editar_paciente, borrar_paciente
 
 # --> Se define paleta colores 
 TITULOS = "#C93384"
@@ -13,8 +13,9 @@ class Frame (tk.Frame):
     def __init__(self, root = None):
         super().__init__(root, width=1000, height=600, bg=PRIMARY)
         self.root = root
-        self.pack()
         self.id_paciente = None
+        self.pack()
+       
 
         crear_tabla()
         self.titulo()
@@ -109,7 +110,7 @@ class Frame (tk.Frame):
         if self.id_paciente == None:
             guardar_paciente(paciente)
         else:
-            editar_paciente(paciente, int(self.id_paciente))
+            editar_paciente(paciente,int(self.id_paciente))
         
         self.bloquear_campos()
         self.mostrar_tabla()        
@@ -148,7 +149,7 @@ class Frame (tk.Frame):
         self.tabla = ttk.Treeview(self, column = ('Nombre', 'Apellido','Dni', 'Celular', 'Mail'))
         self.tabla.place(x =20, y = 310, width=960, height=220) 
 
-        self.tabla.heading('#0', text = 'Id')
+        self.tabla.heading('#0', text = 'ID')
         self.tabla.heading('#1', text = 'Nombre')
         self.tabla.heading('#2', text = 'Apellido' )
         self.tabla.heading('#3', text = 'Dni')
@@ -168,7 +169,7 @@ class Frame (tk.Frame):
                                values = (p[1],p[2],p[3],p[4],p[5])) # --> inserta los valores en cada campo
 
         # --> Botones
-        self.boton_modificar = tk.Button (self, text = 'Modificar', command = self.editar_registros)
+        self.boton_modificar = tk.Button (self, text = 'Modificar', command=self.editar_registros)
         self.boton_modificar.config(width = 18, font = ('Arial', '12', 'bold'), fg = 'white', bg = SECONDARY,activebackground= BOTONES,cursor='hand2')
         self.boton_modificar.place(x = 220, y = 550)
 
@@ -178,7 +179,7 @@ class Frame (tk.Frame):
     #-----------------------------------------------
     def editar_registros(self):
         try:
-             self.id_paciente = self.tabla.item (self.tabla.selection())['text']
+             self.id_paciente = self.tabla.item(self.tabla.selection())['text']
 
              self.nombre_paciente = self.tabla.item (self.tabla.selection())['values'][0]
              self.apellido_paciente = self.tabla.item(self.tabla.selection())['values'][1]
@@ -188,47 +189,14 @@ class Frame (tk.Frame):
 
              self.habilitar_campos()
 
-             self.entry_nombre.insert(0, self.nombre_paciente)
-             self.entry_apellido.insert(0,self.apellido_paciente)
-             self.entry_dni.insert(0, self.dni_paciente)
-             self.entry_cel.insert(0, self.cel_paciente)
-             self.entry_mail.insert(0,self.mail_paciente)
-
-            #  self.nombre.set(self.nombre_paciente)
-            #  self.apellido.set(self.apellido_paciente)
-            #  self.dni.set (self.dni_paciente)
-            #  self.cel.set(self.cel_paciente)
-            #  self.mail.set(self.mail_paciente)
+             self.nombre.set(self.nombre_paciente)
+             self.apellido.set(self.apellido_paciente)
+             self.dni.set (self.dni_paciente)
+             self.cel.set(self.cel_paciente)
+             self.mail.set(self.mail_paciente)
 
         except:
-             pass
-        
-        self.mostrar_tabla()
-
-    # def actualizar_persona(id_paciente, nombre, apellido, dni, cel, mail):
-    #     try:
-    #         nombre = nombre
-    #         apellido = apellido
-    #         dni = dni
-    #         cel = cel
-    #         mail = mail
-            
-    #         cone = Conexion()
-    #         cursor = conn.cursor()
-    #         cursor.execute("UPDATE personas SET nombre = ?, dni = ?, fecha = ? WHERE id = ?", (nombre, apellido,dni, cel,mail, id))
-    #         cone.commit()
-    #         cone.close()
-    #         messagebox.showinfo("Éxito", "Persona actualizada exitosamente.")
-    #         limpiar_campos()
-    #         mostrar_personas()
-    #     except ValueError as e:
-    #         messagebox.showerror("Error", str(e))
-    #     except sqlite3.IntegrityError:
-    #         messagebox.showerror("Error", "El DNI ya está registrado.")
-    #     except Exception as e:
-    #         messagebox.showerror("Error", f"Error: {e}")
-
-    
+             pass    
     #-----------------------------------------------
     def eliminar_registros(self):
         self.id_paciente = self.tabla.item(self.tabla.selection())['text']
